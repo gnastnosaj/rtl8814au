@@ -7613,7 +7613,7 @@ exit:
 	return ret;
 }
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,8,0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,8,0)) || defined(BUILD_OPENWRT)
 static void cfg80211_rtw_update_mgmt_frame_register(struct wiphy *wiphy,
                                              struct wireless_dev *wdev,
                                              struct mgmt_frame_regs *upd)
@@ -10034,7 +10034,7 @@ static struct cfg80211_ops rtw_cfg80211_ops = {
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) || defined(COMPAT_KERNEL_RELEASE)
 	.mgmt_tx = cfg80211_rtw_mgmt_tx,
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,8,0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,8,0)) || defined(BUILD_OPENWRT)
 	.update_mgmt_frame_registrations = cfg80211_rtw_update_mgmt_frame_register,
 #else
 	.mgmt_frame_register = cfg80211_rtw_mgmt_frame_register,
