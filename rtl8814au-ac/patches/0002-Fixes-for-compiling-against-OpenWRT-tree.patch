@@ -1,0 +1,61 @@
+From 91901f08999f743458fab1d13642d1cc9d6d13cd Mon Sep 17 00:00:00 2001
+From: Jason Tsang <jasontsang.dev@gmail.com>
+Date: Thu, 6 Jan 2022 13:34:53 +0800
+Subject: [PATCH] Fixes for compiling against OpenWRT tree.
+
+---
+ os_dep/osdep_service.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/os_dep/osdep_service.c b/os_dep/osdep_service.c
+index 3a1a361..a96343f 100644
+--- a/os_dep/osdep_service.c
++++ b/os_dep/osdep_service.c
+@@ -2220,8 +2220,14 @@ static int isFileReadable(const char *path, u32 *sz)
+ 	if (IS_ERR(fp))
+ 		ret = PTR_ERR(fp);
+ 	else {
++		#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0))
+ 		oldfs = get_fs();
++		#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0))
++		set_fs(KERNEL_DS);
++		#else
+ 		set_fs(get_ds());
++		#endif
++		#endif
+ 
+ 		if (1 != readFile(fp, &buf, 1))
+ 			ret = PTR_ERR(fp);
+@@ -2258,8 +2264,14 @@ static int retriveFromFile(const char *path, u8 *buf, u32 sz)
+ 		if (0 == ret) {
+ 			RTW_INFO("%s openFile path:%s fp=%p\n", __FUNCTION__, path , fp);
+ 
++			#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0))
+ 			oldfs = get_fs();
++			#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0))
++			set_fs(KERNEL_DS);
++			#else
+ 			set_fs(get_ds());
++			#endif
++			#endif
+ 			ret = readFile(fp, buf, sz);
+ 			set_fs(oldfs);
+ 			closeFile(fp);
+@@ -2293,8 +2305,14 @@ static int storeToFile(const char *path, u8 *buf, u32 sz)
+ 		if (0 == ret) {
+ 			RTW_INFO("%s openFile path:%s fp=%p\n", __FUNCTION__, path , fp);
+ 
++			#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0))
+ 			oldfs = get_fs();
++			#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0))
++			set_fs(KERNEL_DS);
++			#else
+ 			set_fs(get_ds());
++			#endif
++			#endif
+ 			ret = writeFile(fp, buf, sz);
+ 			set_fs(oldfs);
+ 			closeFile(fp);
+-- 
+2.32.0.windows.2
+
