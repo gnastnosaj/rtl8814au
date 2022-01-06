@@ -1,0 +1,48 @@
+From c8a789a3f6a21301b4a488aa73182bff373d05d7 Mon Sep 17 00:00:00 2001
+From: Jason Tsang <jasontsang.dev@gmail.com>
+Date: Thu, 6 Jan 2022 14:11:41 +0800
+Subject: [PATCH] Fixes for compiling against OpenWRT tree.
+
+---
+ os_dep/linux/ioctl_cfg80211.c | 25 -------------------------
+ 1 file changed, 25 deletions(-)
+
+diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
+index 4949a1e..7ea72ee 100644
+--- a/os_dep/linux/ioctl_cfg80211.c
++++ b/os_dep/linux/ioctl_cfg80211.c
+@@ -7479,31 +7479,6 @@ static void cfg80211_rtw_mgmt_frame_register(struct wiphy *wiphy,
+ 		frame_type, reg);
+ #endif
+ 
+-	switch (frame_type) {
+-	case IEEE80211_STYPE_AUTH: /* 0x00B0 */
+-		if (reg > 0)
+-			SET_CFG80211_REPORT_MGMT(pwdev_priv, IEEE80211_STYPE_AUTH, reg);
+-		else
+-			CLR_CFG80211_REPORT_MGMT(pwdev_priv, IEEE80211_STYPE_AUTH, reg);
+-		break;
+-#ifdef not_yet
+-	case IEEE80211_STYPE_PROBE_REQ: /* 0x0040 */
+-		if (reg > 0)
+-			SET_CFG80211_REPORT_MGMT(pwdev_priv, IEEE80211_STYPE_PROBE_REQ, reg);
+-		else
+-			CLR_CFG80211_REPORT_MGMT(pwdev_priv, IEEE80211_STYPE_PROBE_REQ, reg);
+-		break;
+-	case IEEE80211_STYPE_ACTION: /* 0x00D0 */
+-		if (reg > 0)
+-			SET_CFG80211_REPORT_MGMT(pwdev_priv, IEEE80211_STYPE_ACTION, reg);
+-		else
+-			CLR_CFG80211_REPORT_MGMT(pwdev_priv, IEEE80211_STYPE_ACTION, reg);
+-		break;
+-#endif
+-	default:
+-		break;
+-	}
+-
+ exit:
+ 	return;
+ }
+-- 
+2.32.0.windows.2
+
