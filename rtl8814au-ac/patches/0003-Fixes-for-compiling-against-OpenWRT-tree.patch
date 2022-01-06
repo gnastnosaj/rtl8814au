@@ -1,0 +1,25 @@
+From b15674fbfd6e6618b8f5d8a2269f99b46ac9fc03 Mon Sep 17 00:00:00 2001
+From: Jason Tsang <jasontsang.dev@gmail.com>
+Date: Thu, 6 Jan 2022 13:57:29 +0800
+Subject: [PATCH] Fixes for compiling against OpenWRT tree.
+
+---
+ os_dep/linux/os_intfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/os_dep/linux/os_intfs.c b/os_dep/linux/os_intfs.c
+index 83d13ab..d410c05 100644
+--- a/os_dep/linux/os_intfs.c
++++ b/os_dep/linux/os_intfs.c
+@@ -1551,7 +1551,7 @@ static u16 rtw_select_queue(struct net_device *dev, struct sk_buff *skb
+ 	#else
+ 	, void *accel_priv
+ 	#endif
+-	#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0)
++	#if ((LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0)) && (LINUX_VERSION_CODE < KERNEL_VERSION(5, 2, 0)))
+ 	, select_queue_fallback_t fallback
+ 	#endif
+ #endif
+-- 
+2.32.0.windows.2
+
